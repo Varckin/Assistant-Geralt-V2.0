@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+
 
 def current_directory():
-    return os.getcwd().replace("\\", '/')
+    return str(Path.cwd()).replace("\\", '/')
