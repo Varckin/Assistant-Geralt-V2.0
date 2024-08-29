@@ -3,7 +3,9 @@ import sys
 import logging
 from aiogram import Bot, Dispatcher
 
-from bot_commands import router
+from base_commands import base_router
+from Translate.translate import translate_router
+from Weather.weather import weather_router
 from json_def import json_read
 from base_def import current_directory
 
@@ -20,7 +22,9 @@ async def main():
     token: str = json_read(f'{current_directory()}/res/config.json')["telegram_token"]
     bot = Bot(token=token)
     dp = Dispatcher()
-    dp.include_router(router)
+    dp.include_router(base_router)
+    dp.include_router(translate_router)
+    dp.include_router(weather_router)
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
