@@ -1,4 +1,5 @@
-/.venv
-/res
-/log
-/__pycache__
+.venv/
+res/
+log/
+__pycache__/
+test.py

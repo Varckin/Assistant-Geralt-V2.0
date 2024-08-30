@@ -20,11 +20,19 @@ class Weather():
         if self.response.status_code == 200:
             self.data: dict = self.response.json()
             self.text: str = ''
+            self.city: list = []
+            for area in self.data['nearest_area']:
+                for key in area:
+                    if key == 'weatherUrl':
+                        continue
+                    for item in area[key]:
+                        if 'value' in item:
+                            self.city.append(item['value'])
+            self.text += f'City: {self.city[1]}, {self.city[2]}, {self.city[0]}'
             for day in self.data['weather']:
                 text = f'''
-City:
 Date: {day['date']}
-Temperature: {day['avgtempC']}
+Approximate temperature: {day['avgtempC']}
 '''
                 self.text += text
             return self.text

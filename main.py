@@ -1,11 +1,12 @@
 import asyncio
-import sys
 import logging
 from aiogram import Bot, Dispatcher
 
 from base_commands import base_router
 from Translate.translate import translate_router
 from Weather.weather import weather_router
+from Generator.generator import generator_router
+from AnonimMail.anonim_mail import anonim_mail_router
 from json_def import json_read
 from base_def import current_directory
 
@@ -25,6 +26,8 @@ async def main():
     dp.include_router(base_router)
     dp.include_router(translate_router)
     dp.include_router(weather_router)
+    dp.include_router(generator_router)
+    dp.include_router(anonim_mail_router)
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
