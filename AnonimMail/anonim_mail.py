@@ -5,30 +5,31 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 import requests
+import io
 
 
 anonim_mail_router = Router()
 
 
 class AnonimMailState(StatesGroup):
-    AnonimMailState = State()
+    anonimMailState = State()
 
 
 class AnonimMail():
     def __init__(self):
         self.base_url: str = 'https://www.1secmail.com/api/v1/'
     def random_generation_email(self):
-        self.random_gen_url: str = f'{self.base_url}?action=genRandomMailbox'
+        self.random_gen_url: str = '?action=genRandomMailbox'
         response = requests.get(self.base_url+self.random_gen_url)
         if response.status_code == 200:
             data: dict = response.json()
             return data[0]
     def check_email(self, login: str, domain: str):
-        self.check_email_url: str = f'{self.base_url}?action=getMessages&login={login}&domain={domain}'
+        self.check_email_url: str = f'?action=getMessages&login={login}&domain={domain}'
         response = requests.get(self.base_url+self.check_email_url)
         if response.status_code == 200:
             data: dict = response.json()
-            text: str = 'Your messages:'
+            text: str = f'{login}@{domain}\nYour messages:'
             if not data:
                 text += '\nNot message in emailbox'
                 return text
@@ -42,6 +43,46 @@ subject:{email_subject}
 date: {email_date}
 '''
                 return text
+    def fetching_message(self, login: str, domain: str, id_message: str):
+        self.fetching_message_url: str = f'?action=readMessage&login={login}&domain={domain}&id={id_message}'
+        response = requests.get(self.base_url+self.fetching_message_url)
+        if response.status_code == 200:
+            data: dict = response.json()
+            print(data)
+            id_mess, from_mail, subject, date, attachments, textbody = (
+                data['id'],
+                data['from'],
+                data['subject'],
+                data['date'],
+                data['attachments'],
+                data['textBody']
+                )
+            text_attach: str = ''
+            if not attachments:
+                pass
+            else:
+                for attachment in attachments:
+                    filename: str = attachment['filename']
+                    size: str = str(attachment['size'])
+                    text_attach += filename
+                    text_attach += size
+            text: str = f'''
+	"id": {str(id_mess)}
+	"from": {from_mail}
+	"subject": {subject}
+	"date": {date}
+	"attachments": {text_attach}
+	"textBody": {textbody}
+'''
+            return text
+    def attachment_download (self, login: str, domain: str, id_message: str, file_name: str):
+        self.attachment_download_url = f'?action=download&login={login}&domain={domain}&id={id_message}&file={file_name}'
+        response = requests.get(self.base_url+self.fetching_message_url)
+        if response.status_code == 200:
+            file_attachment = io.BytesIO(response.content)
+            file_attachment.name = file_name
+
+            return file_attachment
 
 
 @anonim_mail_router.message(Command("anonim_mail"))
@@ -79,3 +120,29 @@ async def press_check(callback_query: CallbackQuery, state: FSMContext):
     await callback_query.message.edit_text(text=f'Your email: {email}', reply_markup=callback_query.message.reply_markup)
     await callback_query.answer()
     
+
+@anonim_mail_router.message(AnonimMailState.anonimMailState)
+async def catch_id_and_attachments(message: Message, state: FSMContext):
+    anonim = AnonimMail()
+    email_data: dict = await state.get_data()
+    parm: list = message.text.split()
+    try:
+        if len(parm) == 2:
+            cmd, id_mess = parm
+        elif len(parm) == 3:
+            cmd, id_mess, attachment = parm
+        else:
+            await message.answer(text='Введите правильно параметры.')
+            return
+        
+        if cmd == 'id':
+            await message.reply(text=anonim.fetching_message(login=email_data['login'], domain=email_data['domain'], id_message=id_mess))
+        elif cmd == 'attachment':
+            await message.reply_document(document=anonim.attachment_download(login=email_data['login'], domain=email_data['domain'], id_message=id_mess, file_name=attachment))
+        else:
+            await message.answer(text='Что то не так. проверьте правильность данных')
+            return
+    except Exception as e:
+        print(e)
+
+        # сделать проверку int и проверку attchment. усложнить проверку и добавить логгирование.

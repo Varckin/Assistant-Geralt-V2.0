@@ -7,6 +7,8 @@ from Translate.translate import translate_router
 from Weather.weather import weather_router
 from Generator.generator import generator_router
 from AnonimMail.anonim_mail import anonim_mail_router
+from Gallows.gallows import gallows_router
+from YesOrNo.yesorno import yesorno_router
 from json_def import json_read
 from base_def import current_directory
 
@@ -28,6 +30,8 @@ async def main():
     dp.include_router(weather_router)
     dp.include_router(generator_router)
     dp.include_router(anonim_mail_router)
+    dp.include_router(gallows_router)
+    dp.include_router(yesorno_router)
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
