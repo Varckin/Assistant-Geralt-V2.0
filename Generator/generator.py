@@ -6,6 +6,14 @@ from aiogram.types import Message
 import random
 import string
 
+import logging
+from logger import config_log
+
+
+logger = logging.getLogger('generator')
+logger.setLevel(logging.INFO)
+logger.addHandler(config_log.command_logger)
+
 
 generator_router = Router()
 
@@ -58,10 +66,11 @@ async def process_source_language(message: Message, state: FSMContext):
         s: bool = 's' in param
 
         if len(param) <= 4 and (l or u or d or s):
-            password = gen.generate_password(length=length, use_lower=l, use_upper=u, use_digits=d, use_special=s)
+            password: str = gen.generate_password(length=length, use_lower=l, use_upper=u, use_digits=d, use_special=s)
             await message.answer(text=password)
         else:
             await message.answer(text='Reread the team instructions.')
-    except (ValueError, IndexError):
+    except (ValueError, IndexError)as e:
         await message.answer(text='Reread the team instructions.')
+        logger.error(f'Error value or index: {e}')
         

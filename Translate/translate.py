@@ -6,7 +6,14 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from urllib.parse import quote
 from json_def import json_read
-from base_def import current_directory
+from pathlib import Path
+import logging
+from logger import config_log
+
+
+logger = logging.getLogger('translate')
+logger.setLevel(logging.INFO)
+logger.addHandler(config_log.command_logger)
 
 
 translate_router = Router()
@@ -15,25 +22,35 @@ translate_router = Router()
 class Translate():
 
     def translate(self, source_language: str, destination_language: str, sentence_for_translation: str):
-        encoded_text = quote(sentence_for_translation)
-        self.base_url: str = 'https://ftapi.pythonanywhere.com/'
-        self.translate_url: str = f'translate?sl={source_language}&dl={destination_language}&text={encoded_text}'
-        response = requests.get(self.base_url+self.translate_url)
-        if response.status_code == 200:
-            data: dict = response.json()
-            text: str = f'''
-"sl": {data['source-language']}
-"st": {data['source-text']}
-"dl": {data['destination-language']}
-"dt": {data['destination-text']}
-'''
-            return text
-        else:
-            print(f"Ошибка: {response.status_code}")
+        try:
+            encoded_text = quote(sentence_for_translation)
+            self.base_url: str = json_read(f'{str(Path.cwd())}/res/config.json')["translate_url"]
+            self.translate_url: str = f'translate?sl={source_language}&dl={destination_language}&text={encoded_text}'
+            response = requests.get(self.base_url+self.translate_url)
+            if response.status_code == 200:
+                data: dict = response.json()
+                text: str = f'''
+    "sl": {data['source-language']}
+    "st": {data['source-text']}
+    "dl": {data['destination-language']}
+    "dt": {data['destination-text']}
+    '''
+                return text
+            else:
+                logger.info(f"Ошибка: {response.status_code}")
+        except KeyError as e:
+            logger.error(f'Key error: {e}')
+        except Exception as e:
+            logger.error(f'Error: {e}')
 
     def select_lang(self):
-        lang: dict = json_read(f'{current_directory()}/Translate/lang_available.json')
-        return lang
+        try:
+            lang: dict = json_read(f'{str(Path.cwd())}/Translate/lang_available.json')
+            return lang
+        except ValueError as e:
+            logger.error(f'Value error, dict not: {e}')
+        except Exception as e:
+            logger.error(f'Error: {e}')
     
 
 class TranslationState(StatesGroup):
