@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from pathlib import Path
 from json_def import json_read
@@ -23,6 +23,7 @@ async def cmd_info( message: Message):
 /anonim_mail - random anonim email.
 /bonus_math - Salary calculation.
 /yesorno - Heads and tails.
+/reminder - The team will create notes for you.
 /info - displays information about commands.
 /about - displays information about the bot.
 /cancel - Cancel all commands
@@ -60,4 +61,4 @@ async def cmd_canscl(message: Message, state: FSMContext):
         await message.answer(text='No active state')
     else:
         await state.clear()
-        await message.answer(text='Operation canceled.')
+        await message.answer(text='Operation canceled.', reply_markup=ReplyKeyboardRemove())

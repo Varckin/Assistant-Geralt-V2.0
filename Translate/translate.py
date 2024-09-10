@@ -67,7 +67,7 @@ def lang_keyboard(buttons_per_row: int = 3) -> ReplyKeyboardMarkup:
 
 
 @translate_router.message(Command("translate"))
-async def cmd_info( message:Message, state: FSMContext):
+async def cmd_translate( message:Message, state: FSMContext):
     await message.answer(text='Enter lang', reply_markup=lang_keyboard())
     await state.set_state(TranslationState.first_land)
 
