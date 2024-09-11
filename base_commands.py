@@ -24,6 +24,7 @@ async def cmd_info( message: Message):
 /bonus_math - Salary calculation.
 /yesorno - Heads and tails.
 /reminder - The team will create notes for you.
+/shortlink - create short link service.
 /info - displays information about commands.
 /about - displays information about the bot.
 /cancel - Cancel all commands
