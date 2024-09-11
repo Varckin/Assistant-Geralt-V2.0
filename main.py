@@ -11,6 +11,7 @@ from AnonimMail.anonim_mail import anonim_mail_router
 from Gallows.gallows import gallows_router
 from YesOrNo.yesorno import yesorno_router
 from Reminder.reminder import reminder_router
+from ShortLink.shortlink import shortlink_router
 from json_def import json_read
 from logger import config_log
 
@@ -31,6 +32,7 @@ async def main():
     dp.include_router(gallows_router)
     dp.include_router(yesorno_router)
     dp.include_router(reminder_router)
+    dp.include_router(shortlink_router)
     
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
