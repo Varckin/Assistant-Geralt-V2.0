@@ -1,4 +1,5 @@
 from json_def import json_read
+from Localization.localization import getStr
 from pathlib import Path
 import json
 import requests
@@ -48,10 +49,7 @@ async def cmd_shortlink( message:Message):
     if len(list_message) == 2:
         shrt = Shortlink()
         response: dict = shrt.create_link(list_message[1])
-        text: str = f"""
-Длинная ссылка: {response.get("url")}
-Короткая ссылка: {response.get("tiny_url")}
-"""
+        text: str = getStr(lang_code=message.from_user.language_code, key_str="shortlinkText").format(url=response.get("url"), tiny_url=response.get("tiny_url"))  
         await message.reply(text=text)
     else:
-        await message.answer(text="Введите правильную структуру сообщения.")
+        await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="error"))

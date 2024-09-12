@@ -1,0 +1,46 @@
+{
+    "start_welcome": "Hello {first_name}.",
+    "info": "Bot commands:\n/info - Shows available commands.\n/bonus_math - Bonus calculation.\n/about - Information about the bot.\n/yesorno - Sends a GIF with the answer.\n/weather - Sends approximate temperature for three days. (How to make a request: /weather City)\n/translate - Translator.\n/shortlink - Shortens a long link. (How to make a request: /shortlink link)\n/reminder - Creates notes.\n/generator - Creates strong passwords.\n/gallows - Hangman game.\n/anonim_mail - Provides a temporary email.\n/cancel - Cancels the active operation.",
+    "about": "Creator: [Markus](t.me/varckin)\nVersion: {version}",
+    "bonusMath": "Your calculations:",
+    "error": "Error, please enter valid data....",
+    "cancelNoState": "No active operations.",
+    "cancelOperationCanceled": "Operation canceled.",
+
+    "weather": "Date: {date}\nApproximate temperature: {avgtempC}",
+
+    "translateChoiceFirstLang": "Choose the language to translate from.",
+    "translateChoiceSecondLang": "Choose the language to translate to.",
+    "translateText": "Original language: {sourcelanguage}\nOriginal text: {sourcetext}\nTranslation language: {destinationlanguage}\nTranslated text: {destinationtext}",
+    "translateError": "Click on the button with the language.",
+
+    "shortlinkText": "Long link: {url}\nShort link: {tiny_url}",
+
+    "buttonListReminder": ["Show reminders", "Create a reminder", "Delete reminder"],
+    "reminderStart": "What do you need to do?",
+    "reminderDescription": "Enter description.",
+    "reminderCreate": "Reminder created.",
+    "reminderShow": "Enter the reminder ID",
+    "reminderShowAll": "Reminder ID: {id}\nDescription: {description}\nCreation time: {created_at}",
+    "notReminder": "No reminders.",
+    "reminderDelete": "Reminder {text} deleted",
+    "reminderError": "Check the ID or such a reminder doesn't exist.",
+
+    "generatorInstructions": "Enter parameters to create a strong password.\nl - Use lowercase letters.\nu - Use Uppercase letters.\nd - Use numbers.\ns - Use special symbols.\nExample: ld 8 (Password length)",
+
+    "anonimmailLoginDomain": "{login}@{domain}\nYour messages:",
+    "anonimmailNotMessage": "\nNo messages in the inbox",
+    "anonimmailListMessage": "Message ID: {email_id}\nFrom: {email_from}\nSubject: {email_subject}\nDate: {email_date}",
+    "anonimmailMessage": "ID: {id_mess}\nFrom: {from_mail}\nSubject: {subject}\nDate: {date}\nAttachments: {text_attach}\nMessage text: {textbody}",
+
+    "anonimmailButtonsList": ["Refresh inbox", "Change inbox"],
+    "anonimmailYourMail": "Your address {email}",
+
+    "gallowWordSelected": "Word selected.\nEnter a letter.\nGuessed: {guessed_word}\nAttempts: {tries}",
+    "gallowEnterOneLetter": "Enter one letter.\nGuessed: {guessed_word}",
+    "gallowAlreadyLetter": "This letter is already in the guessed word.\nGuessed: {guessed_word}",
+    "gallowCongratulation": "Congratulations! You won.\nThe guessed word: {guessed_word}",
+    "gallowRight": "Correct!\nGuessed: {guessed_word}",
+    "gallowLost": "You lost! The hidden word was: {selected_word}",
+    "gallowWrong": "Wrong!\nGuessed: {guessed_word}\nAttempts: {tries}"
+}

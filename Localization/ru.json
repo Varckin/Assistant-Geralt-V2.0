@@ -1,0 +1,46 @@
+{
+    "start_welcome": "Привет {first_name}.",
+    "info": "Команды бота:\n/info - Показывает доступные команды.\n/bonus_math - Расчет бонусов.\n/about - Информация о боте.\n/yesorno - Отправляет гифку с ответом.\n/weather - Отправляет приблизительную температуру на три дня. (Как составлять запрос: /weather Город)\n/translate - Переводчик.\n/shortlink - Делает из длинной компактную ссылку. (Как составлять запрос: /shortlink ссылка)\n/reminder - Делает заметки.\n/generator - Создает надежные пароли.\n/gallows - Игра Виселица.\n/anonim_mail - Выдает временную почту.\n/cancel - Отмена активной операции.",
+    "about": "Creater: [Markus](t.me/varckin)\nVersion: {version}",
+    "bonusMath": "Твои расчеты:",
+    "error": "Ошибка, введите валидные данные....",
+    "cancelNoState": "Нет активных операций.",
+    "cancelOperationCanceled": "Операция отменена.",
+
+    "weather": "Дата: {date}\nПриблизительная температура: {avgtempC}",
+
+    "translateChoiceFirstLang": "Выберите язык из которого надо перевести текст.",
+    "translateChoiceSecondLang": "Выберите язык для перевода.",
+    "translateText": "Оригинальный язык: {sourcelanguage}\nОригинальный текст: {sourcetext}\nЯзык перевода: {destinationlanguage}\nПереведенный текст: {destinationtext}",
+    "translateError": "Нажмите на кнопку с языком.",
+
+    "shortlinkText": "Длинная ссылка: {url}\nКороткая ссылка: {tiny_url}",
+
+    "buttonListReminder": ["Показать напоминания","Создать напоминание", "Удалить напоминание"],
+    "reminderStart": "Что надо сделать?",
+    "reminderDescription": "Введи описание.",
+    "reminderCreate": "Напоминание создано.",
+    "reminderShow": "Введите id напоминания",
+    "reminderShowAll": "id напоминания: {id}\nОписание: {description}\nВремя создания: {created_at}",
+    "notReminder": "Нету напоминаний.",
+    "reminderDelete": "Удалено напоминание {text}",
+    "reminderError": "Проверьте правильность id или такого напоминания нет.",
+
+    "generatorInstructions": "Введите параметры для создания устойчивого пароля.\nl - Исопльзование маленьких букв.\nu - Исопльзование Больших букв.\nd - Исопльзование цифр.\ns - Исопльзование спец. символов.\nПример: ld 8(Длина пароля)",
+
+    "anonimmailLoginDomain": "{login}@{domain}\nВаши сообщения:",
+    "anonimmailNotMessage": "\nНет писем в ящике",
+    "anonimmailListMessage": "id сообщения: {email_id}\nОт кого: {email_from}\nТема: {email_subject}\nДата: {email_date}",
+    "anonimmailMessage": "id: {id_mess}\nОт кого: {from_mail}\nТема: {subject}\nДата: {date}\nВложения: {text_attach}\nТекст сообщения: {textbody}",
+
+    "anonimmailButtonsList": ["Обновить ящик", "Сменить ящик"],
+    "anonimmailYourMail": "Ваш адрес {email}",
+
+    "gallowWordSelected": "Слово выбрано.\nНапишите букву.\nУгадано: {guessed_word}\nПопыток: {tries}",
+    "gallowEnterOneLetter": "Напишите одну букву.\nУгадано: {guessed_word}",
+    "gallowAlreadyLetter": "Эта буква уже есть в угаданном слове.\nУгадано: {guessed_word}",
+    "gallowCongratulation": "Поздравляю! Вы выиграли\nУгаданное слово: {guessed_word}",
+    "gallowRight": "Правильно!\nУгадано: {guessed_word}",
+    "gallowLost": "Вы проиграли! Спрятанное слово: {selected_word}",
+    "gallowWrong": "Ошибка!\nУгадано: {guessed_word}\nПопыток: {tries}"
+}                

@@ -8,6 +8,7 @@ from pathlib import Path
 from random import choice
 import logging
 from logger import config_log
+from Localization.localization import getStr
 
 
 logger = logging.getLogger('gallows')
@@ -60,12 +61,7 @@ async def cmd_gallows (message: Message, state: FSMContext):
         tries=tries
     )
     await state.set_state(GallowsState.gallowsState)
-
-    text: str = f'''
-The word is selected. Write the letter.
-Guessed word: {guessed_word}
-Tries: {tries}
-'''
+    text: str = getStr(lang_code=message.from_user.language_code, key_str="gallowWordSelected").format(guessed_word=guessed_word, tries=tries)
     await message.answer(text=text)
 
 
@@ -81,13 +77,11 @@ async def game_run(message: Message, state: FSMContext):
     guess = message.text.lower()
     try:
         if len(guess) != 1:
-            await message.reply(f"Please enter only one letter.\n"
-                            f"Guessed word: {guessed_word}")
+            await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowEnterOneLetter").format(guessed_word=guessed_word))
             return
 
         if guess in guessed_letters:
-            await message.reply(f"You have already guessed this letter.\n"
-                            f"Guessed word: {guessed_word}")
+            await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowAlreadyLetter").format(guessed_word=guessed_word))
             return
         
         if guess in selected_word:
@@ -95,24 +89,20 @@ async def game_run(message: Message, state: FSMContext):
             guessed_word = ''.join(letter if letter in guessed_letters else '*' for letter in selected_word)
 
             if guessed_word == selected_word:
-                await message.reply(f"Congratulations! You've won!\n"
-                                f"Guessed word: {guessed_word}")
+                await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowCongratulation").format(guessed_word=guessed_word))
                 await state.clear()
             else:
-                await message.reply(f"Right!\n"
-                                f"Guessed word: {guessed_word}")
+                await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowRight").format(guessed_word=guessed_word))
         else:
             tries -= 1
 
             if tries == 0:
-                await message.reply(f"You've lost! The hidden word was: {selected_word}")
+                await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowLost").format(selected_word=selected_word))
                 gif = FSInputFile(gall.gif_load())
                 await message.answer_animation(animation=gif)
                 await state.clear()
             else:
-                await message.reply(f"Wrong!\n"
-                                f"Guessed word: {guessed_word}\n"
-                                f"Tries: {tries}")
+                await message.reply(getStr(lang_code=message.from_user.language_code, key_str="gallowWrong").format(guessed_word=guessed_word, tries=tries))
 
         await state.update_data(
             guessed_word=guessed_word,

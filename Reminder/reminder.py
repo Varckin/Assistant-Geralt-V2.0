@@ -5,11 +5,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from pathlib import Path
 import logging
-import json
 from json_def import json_read, json_write
+from Localization.localization import getStr
 from logger import config_log
 from uuid import uuid4
 from datetime import datetime
+
 
 logger = logging.getLogger('reminder')
 logger.setLevel(logging.INFO)
@@ -24,10 +25,12 @@ class ReminderState(StatesGroup):
     createstate = State()
     deletestate = State()
 
-def reminder_keyboard() -> ReplyKeyboardMarkup:
-    show_reminder = KeyboardButton(text="Показать напоминания")
-    create_reminder = KeyboardButton(text="Создать напоминание")
-    delete_reminder = KeyboardButton(text="Удалить напоминание")
+
+def reminder_keyboard(lang_user: str) -> ReplyKeyboardMarkup:
+    button_text: list = getStr(lang_code=lang_user, key_str="buttonListReminder")
+    show_reminder = KeyboardButton(text=button_text[0])
+    create_reminder = KeyboardButton(text=button_text[1])
+    delete_reminder = KeyboardButton(text=button_text[2])
     keyboard: list = [[show_reminder], [create_reminder], [delete_reminder]]
     
     return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
@@ -92,13 +95,13 @@ class Reminder():
 
 @reminder_router.message(Command("reminder"))
 async def cmd_reminder(message: Message, state: FSMContext):
-    await message.answer("Что надо сделать?", reply_markup=reminder_keyboard())
+    await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderStart"), reply_markup=reminder_keyboard())
     await state.set_state(ReminderState.reminderstate)
 
 
-@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == "Создать напоминание")
+@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == getStr(lang_code=message.from_user.language_code, key_str="buttonListReminder")[0])
 async def add_reminder(message: Message, state: FSMContext):
-    await message.answer("Введи описание.")
+    await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderDescription"))
     await state.set_state(ReminderState.createstate)
 
 
@@ -106,29 +109,29 @@ async def add_reminder(message: Message, state: FSMContext):
 async def add_description_reminder(message: Message, state: FSMContext):
     rmndr = Reminder()
     rmndr.create_reminder(id_user=str(message.chat.id), description=message.text)
-    await message.answer(text="Напоминание создано.")
+    await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderCreate"))
     await state.set_state(ReminderState.reminderstate)
 
-@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == "Показать напоминания")
+
+@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == getStr(lang_code=message.from_user.language_code, key_str="buttonListReminder")[1])
 async def show_reminder(message: Message):
     rmndr = Reminder()
     user_reminder: dict = rmndr.show_reminder(str(message.chat.id))
     if len(user_reminder) != 0:
         text: str = ""
         for key, item in user_reminder.items():
-            text += f"""
-id напоминания: {item.get("id")}
-Описание: {item.get("description")}
-Время создания: {item.get("created_at")}
-    """
+            text += getStr(lang_code=message.from_user.language_code,
+                           key_str="reminderShowAll").format(id=item.get("id"),
+                                                             description=item.get("description"),
+                                                             created_at=item.get("created_at"))
         await message.answer(text=text)
     else:
-        await message.answer(text="Нету напоминаний.")
+        await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="notReminder"))
 
 
-@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == "Удалить напоминание")
+@reminder_router.message(ReminderState.reminderstate, lambda message: message.text == getStr(lang_code=message.from_user.language_code, key_str="buttonListReminder")[2])
 async def delete_reminder(message: Message, state: FSMContext):
-    await message.answer(text="Введите id напоминания")
+    await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderShow"))
     await state.set_state(ReminderState.deletestate)
 
 
@@ -137,7 +140,7 @@ async def id_delete_reminder(message: Message, state: FSMContext):
     rmndr = Reminder()
     boolean: bool = rmndr.delete_reminders(message.text)
     if boolean:
-        await message.answer(text=f"Удалено напоминание {message.text}")
+        await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderDelete").format(text=message.text))
         await state.set_state(ReminderState.reminderstate)
     else:
-        await message.answer(text="Проверьте правильность id или такого напоминания нет.")
+        await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderError"))

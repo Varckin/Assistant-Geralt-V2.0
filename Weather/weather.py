@@ -2,11 +2,11 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from urllib.parse import quote
-
 import requests
 from requests.exceptions import RequestException
 from pathlib import Path
 from json_def import json_read
+from Localization.localization import getStr
 import logging
 from logger import config_log
 
@@ -20,7 +20,7 @@ weather_router = Router()
 
 
 class Weather():
-    def weather(self, city: str, lang: str = 'en'):
+    def weather(self, city: str, lang_user: str, lang: str = 'en'):
         try:
             self.city = quote(city)
             self.directory = json_read(f'{str(Path.cwd())}/res/config.json')['weather_url']
@@ -39,13 +39,12 @@ class Weather():
                                 self.city.append(item['value'])
                 self.text += f'City: {self.city[1]}, {self.city[2]}, {self.city[0]}'
                 for day in self.data['weather']:
-                    text = f'''
-Date: {day['date']}
-Approximate temperature: {day['avgtempC']}
-'''
+                    text: str = getStr(lang_code=lang_user,
+                                       key_str="weather").format(data=day["date"], avgtempC=day["avgtempC"])
                     self.text += text
                 return self.text
-            self.response.raise_for_status()
+            else:
+                self.response.raise_for_status()
         except IndexError as e:
             logger.error(f'Index error: {e}')
         except KeyError as e:
@@ -57,9 +56,10 @@ Approximate temperature: {day['avgtempC']}
 
 
 @weather_router.message(Command("weather"))
-async def cmd_info( message:Message):
+async def cmd_weather( message:Message):
     try:
         cmd, city = message.text.split()
-        await message.answer(text=Weather().weather(city))
+        await message.answer(text=Weather().weather(city=city, lang_user=message.from_user.language_code))
     except:
-        await message.answer(text='Enter normal request')
+        await message.answer(text=getStr(lang_code=message.from_user.language_code,
+                                         key_str="error"))

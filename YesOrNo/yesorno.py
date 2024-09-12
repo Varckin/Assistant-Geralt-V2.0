@@ -1,12 +1,12 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-
 import requests
 from requests.exceptions import RequestException
-from json_def import json_read
 from pathlib import Path
 import logging
+from json_def import json_read
+from Localization.localization import getStr
 from logger import config_log
 
 
@@ -35,9 +35,9 @@ def get_answer_big_questions():
         except RequestException as e:
              logger.info(f"response status code not 200: {str(e)}")
         except Exception as e:
-             logger.info(f"Error: {e}")
+             logger.error(f"Error: {e}")
 
 
 @yesorno_router.message(Command("yesorno"))
-async def cmd_gallows (message: Message):
+async def cmd_yesorno (message: Message):
     await message.answer_animation(animation=get_answer_big_questions())

@@ -8,6 +8,7 @@ import string
 
 import logging
 from logger import config_log
+from Localization.localization import getStr
 
 
 logger = logging.getLogger('generator')
@@ -39,21 +40,14 @@ class Generator():
 
 
 @generator_router.message(Command("generator"))
-async def cmd_start(message: Message, state: FSMContext):
-    text = '''
-Enter the parameters in the following message.
-l - use lower case.
-u - use upper case.
-d - use numbers.
-s - use special characters.
-For example: ld 8(password length)
-'''
+async def cmd_generator(message: Message, state: FSMContext):
+    text: str = getStr(lang_code=message.from_user.language_code, key_str="generatorInstructions")
     await message.answer(text=text)
     await state.set_state(GeneratorState.generatorstate)
 
 
 @generator_router.message(GeneratorState.generatorstate)
-async def process_source_language(message: Message, state: FSMContext):
+async def process_generator(message: Message, state: FSMContext):
     try:
         gen = Generator()
         param, length = message.text.split()
@@ -69,8 +63,8 @@ async def process_source_language(message: Message, state: FSMContext):
             password: str = gen.generate_password(length=length, use_lower=l, use_upper=u, use_digits=d, use_special=s)
             await message.answer(text=password)
         else:
-            await message.answer(text='Reread the team instructions.')
+            await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="error"))
     except (ValueError, IndexError)as e:
-        await message.answer(text='Reread the team instructions.')
+        await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="error"))
         logger.error(f'Error value or index: {e}')
         
