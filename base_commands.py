@@ -37,8 +37,8 @@ async def cmd_bonus_math(message: Message):
         cmd, num = list_parm
         try:
             num: int = int(num)
-            await message.answer(text=f"{getStr(lang_code=message.from_user.language_code,
-                                                key_str="bonusMath")} {num * 7.6 / 100}")
+            text: str = getStr(lang_code=message.from_user.language_code, key_str="bonusMath")
+            await message.answer(text=f"{text} {num * 7.6 / 100}")
         except ValueError:
             await message.answer(text=getStr(lang_code=message.from_user.language_code,
                                              key_str="error"))
