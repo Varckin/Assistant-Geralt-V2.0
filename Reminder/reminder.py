@@ -95,7 +95,8 @@ class Reminder():
 
 @reminder_router.message(Command("reminder"))
 async def cmd_reminder(message: Message, state: FSMContext):
-    await message.answer(text=getStr(lang_code=message.from_user.language_code, key_str="reminderStart"), reply_markup=reminder_keyboard())
+    lang_code: str = message.from_user.language_code
+    await message.answer(text=getStr(lang_code=lang_code, key_str="reminderStart"), reply_markup=reminder_keyboard(lang_user=lang_code))
     await state.set_state(ReminderState.reminderstate)
 
 

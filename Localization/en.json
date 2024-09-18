@@ -16,12 +16,12 @@
 
     "shortlinkText": "Long link: {url}\nShort link: {tiny_url}",
 
-    "buttonListReminder": ["Show reminders", "Create a reminder", "Delete reminder"],
+    "buttonListReminder": ["Create a reminder", "Show reminders", "Delete reminder"],
     "reminderStart": "What do you need to do?",
     "reminderDescription": "Enter description.",
     "reminderCreate": "Reminder created.",
     "reminderShow": "Enter the reminder ID",
-    "reminderShowAll": "Reminder ID: {id}\nDescription: {description}\nCreation time: {created_at}",
+    "reminderShowAll": "Reminder ID: {id}\nDescription: {description}\nCreation time: {created_at}\n",
     "notReminder": "No reminders.",
     "reminderDelete": "Reminder {text} deleted",
     "reminderError": "Check the ID or such a reminder doesn't exist.",

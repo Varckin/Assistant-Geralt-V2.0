@@ -16,12 +16,12 @@
 
     "shortlinkText": "Длинная ссылка: {url}\nКороткая ссылка: {tiny_url}",
 
-    "buttonListReminder": ["Показать напоминания","Создать напоминание", "Удалить напоминание"],
+    "buttonListReminder": ["Создать напоминание","Показать напоминания", "Удалить напоминание"],
     "reminderStart": "Что надо сделать?",
     "reminderDescription": "Введи описание.",
     "reminderCreate": "Напоминание создано.",
     "reminderShow": "Введите id напоминания",
-    "reminderShowAll": "id напоминания: {id}\nОписание: {description}\nВремя создания: {created_at}",
+    "reminderShowAll": "id напоминания: {id}\nОписание: {description}\nВремя создания: {created_at}\n",
     "notReminder": "Нету напоминаний.",
     "reminderDelete": "Удалено напоминание {text}",
     "reminderError": "Проверьте правильность id или такого напоминания нет.",
